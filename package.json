@@ -1,0 +1,26 @@
+{
+  "name": "fishtracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^0.8.5",
+    "co-bcrypt": "^1.0.0",
+    "co-body": "^4.0.0",
+    "co-monk": "^1.0.0",
+    "kcors": "^1.1.0",
+    "koa": "^1.2.0",
+    "koa-jwt": "^1.1.2",
+    "koa-pg": "^0.24.1",
+    "koa-router": "^5.4.0",
+    "monk": "^1.0.1",
+    "pg": "^4.5.3"
+  },
+  "devDependencies": {}
+}
