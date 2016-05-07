@@ -34,11 +34,11 @@ router.post('/api/lakes/newlake', function* () {
     var user = this.state.user.id;
     lake.username = user;
    
-    if(!lake.name){
+    if(!lake.lakeName){
         this.throw(400, "Lake name must be filled out!");
     }
     var sql = 'INSERT INTO lake(lakeName, user_id) values($1, $2) RETURNING Id';
-    var data = yield this.pg.db.client.query_(sql, [lake.name, user]);
+    var data = yield this.pg.db.client.query_(sql, [lake.lakeName, user]);
     lake.id = data.rows[0].id;
     lake.userId = user;
     this.status = 201;
