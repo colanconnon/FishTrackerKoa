@@ -4,7 +4,6 @@ var app = koa();
 var router = require("koa-router");
 var parse = require("co-body");
 
-var r = require('rethinkdb');
 var router = require('koa-router')();
 
 router.get('/', function*(){

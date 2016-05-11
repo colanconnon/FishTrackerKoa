@@ -1,7 +1,6 @@
 var router = require("koa-router");
 var parse = require("co-body");
 
-var r = require("rethinkdb");
 var router = require('koa-router')();
 var bcrypt = require('co-bcrypt');
 var jwt = require('koa-jwt');
