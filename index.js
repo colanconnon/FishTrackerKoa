@@ -12,7 +12,18 @@ var postgresConn = require('./secrets').dbstring
 
 app.use(koaPg(postgresConn))
 
-app.use(cors())
+app.use(function *(next){
+  this.set("Access-Control-Allow-Origin", "*");
+  this.set("Access-Control-Allow-Credentials", "true");
+  this.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT");
+  this.set("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept");
+  if (this.method === 'OPTIONS') {
+      this.status = 204;
+  } else {
+      yield next;
+  } 
+
+});
 
 
 
