@@ -11,22 +11,34 @@ var koaPg = require('koa-pg')
 var postgresConn = require('./secrets').dbstring
 
 app.use(koaPg(postgresConn))
-app.use(function *(next){
-  this.set("Access-Control-Allow-Origin", "*");
-  this.set("Access-Control-Allow-Credentials", "true");
-  this.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT");
-  this.set("Access-Control-Allow-Headers", "Authorization,Content-Type");
-  if (this.method === 'OPTIONS') {
+app.use(function* (next) {
+  try {
+    this.set("Access-Control-Allow-Origin", "*");
+    this.set("Access-Control-Allow-Credentials", "true");
+    this.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT");
+    this.set("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept");
+    if (this.method === 'OPTIONS') {
       this.status = 204;
-  } else {
+    } else {
       yield next;
-  } 
+      console.log(this);
+    }
+  } catch(e) {
+    this.set( "Access-Control-Allow-Origin", "*");
+    this.set("Access-Control-Allow-Credentials", "true");
+    this.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT");
+    this.set("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept");
+    this.status = err.status || 500;
+    this.body = err.message;
+    console.log(this);
+  }
+ 
 
 });
 
 
 
-app.use(jwt({secret: secret, key: 'user'}).unless({path: [/^\/public/]}))
+app.use(jwt({ secret: secret, key: 'user' }).unless({ path: [/^\/public/] }))
 
 
 app
@@ -41,6 +53,6 @@ app
   .use(lakeroutes.routes())
   .use(lakeroutes.allowedMethods())
 
-app.listen(3000);
+app.listen(3005);
 
 console.log('the app is listening on port 3000');
