@@ -30,7 +30,6 @@ app.use(function* (next) {
     this.set("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept");
     this.status = err.status || 500;
     this.body = err.message;
-    console.log(this);
   }
  
 
