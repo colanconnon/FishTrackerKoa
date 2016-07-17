@@ -24,6 +24,7 @@ app.use(function* (next) {
       console.log(this);
     }
   } catch(e) {
+    console.log(e);
     this.set( "Access-Control-Allow-Origin", "*");
     this.set("Access-Control-Allow-Credentials", "true");
     this.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT");

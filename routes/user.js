@@ -14,8 +14,7 @@ router.post('/public/api/user/login', function* (next) {
         this.status = 401;
         yield next;
     }
-    var users = yield this.pg.db.client.query_('Select username, hash, id from users where username = ($1)', [user.username]);
-    console.log(users);
+    var users = yield this.pg.db.client.query_(`Select username, hash, id from "users" where "username" = ($1)`, [user.username]);
     users = users.rows;
     if (users.length === 0) {
         this.body = JSON.stringify({ error: 'Incorrect username or password' });
