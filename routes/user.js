@@ -8,7 +8,6 @@ var secret = require('../secrets').jwt;
 
 router.post('/public/api/user/login', function* (next) {
     var user = yield parse(this);
-    debugger;
     if (!user.username || !user.password) {
         this.throw(401, JSON.stringify({ error: 'Incorrect username or password' }));
         return yield next;
@@ -43,6 +42,9 @@ router.post('/public/api/user/signup', function* (next) {
         this.throw(400, JSON.stringify({ error: 'You must provide a password, and they must match' }));
         return yield next;
     }
+    //TODO: Need to check for duplicate usernames;
+
+
     //need to hash the password here
     var salt = yield bcrypt.genSalt(10);
     var hash = yield bcrypt.hash(user.password, salt);

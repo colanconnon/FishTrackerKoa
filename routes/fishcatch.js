@@ -47,6 +47,7 @@ router.get('/api/fishcatch/getall', function* () {
     fishCatches: result.rows
   };
   this.status = 200;
+  return yield next;
 });
 
 router.post('/api/fishcatch/insert', function* () {
