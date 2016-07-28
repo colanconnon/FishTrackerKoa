@@ -21,10 +21,8 @@ app.use(function* (next) {
       this.status = 204;
     } else {
       yield next;
-      console.log(this);
     }
-  } catch(e) {
-    console.log(e);
+  } catch(err) {
     this.set( "Access-Control-Allow-Origin", "*");
     this.set("Access-Control-Allow-Credentials", "true");
     this.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT");
