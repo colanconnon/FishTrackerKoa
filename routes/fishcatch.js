@@ -22,13 +22,14 @@ router.get('/api/fishcatch/:id', function* () {
   where fishcatch.id = $1 and fishcatch.user_id = $2;
   `;
   var result = yield this.pg.db.client.query_(sql, [id, this.state.user.id]);
-  console.log(result);
   if (result.rows[0]) {
     this.body = result.rows[0];
     this.status = 200;
+    return yield next;
   }
   else {
-    this.throw(400, "Results don't exist");
+    this.throw(400, { error: "Results don't exist" });
+    return yield next;
   }
 
 });
@@ -51,15 +52,14 @@ router.get('/api/fishcatch/getall', function* () {
 });
 
 router.post('/api/fishcatch/insert', function* () {
-  var fishCatch = yield parse(this);
   try {
+    var fishCatch = yield parse(this);
     if (typeof fishCatch === 'string') {
       fishCatch = JSON.parse(fishCatch);
     }
-
-
     if (!fishCatch.lake_id || !fishCatch.latitude || !fishCatch.longitude) {
-      this.throw(400, "Checked required props, and try again");
+      this.throw(400, { error: "Check required fields and try again." });
+      return yield next;
     }
     var sql = `
     INSERT INTO public.fishcatch(
@@ -68,18 +68,17 @@ router.post('/api/fishcatch/insert', function* () {
   `;
     var result = yield this.pg.db.client.query_(sql, [fishCatch.latitude, fishCatch.longitude, fishCatch.details,
       fishCatch.temperature, fishCatch.lake_id, this.state.user.id, fishCatch.date]);
-    console.log(result);
     fishCatch.id = result.rows[0].id;
     this.body = fishCatch;
     this.status = 200;
-  } catch(e) {
-    this.body = "Error";
-    this.throw(400, e);
+    return yield next;
+  } catch (e) {
+    this.throw(400, { error: "Error inserting fish catch into the database, please check all fields and try again!" });
+    return yield next;
   }
 });
 
 router.put('/api/fishcatch/update', function* () {
-  console.log("Test");
   var fishCatch = yield parse(this);
   if (typeof fishCatch === 'string') {
     fishCatch = JSON.parse(fishCatch);
@@ -88,15 +87,16 @@ router.put('/api/fishcatch/update', function* () {
       UPDATE fishcatch
         SET latitude=$1, longitude=$2, details=$3, temperature=$4, lake_id=$5
       WHERE id = $6 and user_id = $7;
-
     `;
   var result = yield this.pg.db.client.query_(sql, [fishCatch.latitude, fishCatch.longitude, fishCatch.details,
     fishCatch.temperature, fishCatch.lake_id, fishCatch.id, this.state.user.id]);
   if (result.rowCount === 1) {
     this.body = fishCatch;
     this.status = 201;
+    return yield next;
   } else {
-    this.throw(400, "You don't have the permissions to update this object");
+    this.throw(400, { error: "You don't have the permissions to update this object" });
+    return yield next;
   }
 });
 

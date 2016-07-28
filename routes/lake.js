@@ -68,7 +68,6 @@ router.put('/api/lakes/update', function* () {
     }
     var sql = 'update lake set (lakeName) = ($1) where id = $2 and user_id = $3';
     var result = yield this.pg.db.client.query_(sql, [lake.name, lake.id, this.state.user.id]);
-    console.log(result);
     if (result.rowCount !== 0) {
         this.body = lake;
         this.status = 201;
