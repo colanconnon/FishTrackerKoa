@@ -1,4 +1,3 @@
-/* @flow weak */
 var router = require("koa-router");
 var parse = require("co-body");
 
