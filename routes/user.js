@@ -10,16 +10,14 @@ router.post('/public/api/user/login', function* (next) {
     var user = yield parse(this);
     debugger;
     if (!user.username || !user.password) {
-        this.body = JSON.stringify({ error: 'Incorrect username or password' });
-        this.status = 401;
-        yield next;
+        this.throw(401, JSON.stringify({ error: 'Incorrect username or password' }));
+        return yield next;
     }
     var users = yield this.pg.db.client.query_(`Select username, hash, id from "users" where "username" = ($1)`, [user.username]);
     users = users.rows;
     if (users.length === 0) {
-        this.body = JSON.stringify({ error: 'Incorrect username or password' });
-        this.status = 401;
-        yield next;
+        this.throw(401, JSON.stringify({ error: 'Incorrect username or password' }));
+        return yield next;
     } else {
         if (yield bcrypt.compare(user.password, users[0].hash)) {
             var token = jwt.sign({ "user": users[0].username, id: users[0].id }, secret);
@@ -27,11 +25,10 @@ router.post('/public/api/user/login', function* (next) {
             delete users[0].hash;
             this.body = users[0];
             this.status = 200;
-            yield next;
+            return yield next;
         } else {
-            this.body = JSON.stringify({ error: 'Incorrect username or password' });
-            this.status = 401;
-            yield next;
+            this.throw(401, JSON.stringify({ error: 'Incorrect username or password' }));
+            return yield next;
         }
     }
 });
@@ -39,10 +36,12 @@ router.post('/public/api/user/login', function* (next) {
 router.post('/public/api/user/signup', function* (next) {
     var user = yield parse(this);
     if (!user.username) {
-        this.throw(400, 'You must provide a username');
+        this.throw(400, JSON.stringify({ error: 'Username is required' }));
+        return yield next;
     }
     if (!user.password || !(user.confirmpassword === user.password)) {
-        this.throw(400, 'You must provide a password, and the passwords must match');
+        this.throw(400, JSON.stringify({ error: 'You must provide a password, and they must match' }));
+        return yield next;
     }
     //need to hash the password here
     var salt = yield bcrypt.genSalt(10);
@@ -55,6 +54,7 @@ router.post('/public/api/user/signup', function* (next) {
     delete user.confirmpassword;
     this.body = user;
     this.status = 201;
+    return yield next;
 });
 
 module.exports = router;

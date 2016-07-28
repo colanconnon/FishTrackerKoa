@@ -17,6 +17,7 @@ app.use(function* (next) {
     this.set("Access-Control-Allow-Credentials", "true");
     this.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT");
     this.set("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept");
+    this.set("Content-Type","application/json");
     if (this.method === 'OPTIONS') {
       this.status = 204;
     } else {
@@ -29,6 +30,7 @@ app.use(function* (next) {
     this.set("Access-Control-Allow-Headers", "Authorization,Content-Type,Accept");
     this.status = err.status || 500;
     this.body = err.message;
+    this.set("Content-Type","application/json");
   }
  
 
