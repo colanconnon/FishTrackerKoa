@@ -1,7 +1,7 @@
 This is an Api server, connecting to a postgres database
 
 To Setup For running: 
-    create a file in the top level directory named secrets.json containing
+    create a file in the top level directory named secrets.js containing
 
     module.exports = {  jwt: "secret" , dbstring : 'postgres://username:password@localhost:5432/dbname' }
 
