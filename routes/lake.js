@@ -6,11 +6,6 @@ var parse = require("co-body");
 
 var router = require('koa-router')();
 
-router.get('/public/', function* () {
-    this.body = "test123";
-    this.status = 200;
-    return yield next;
-});
 
 router.get('/api/lake/:id', function* () {
     var id = this.params.id;

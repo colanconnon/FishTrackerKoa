@@ -15,18 +15,16 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
-DROP DATABASE docker;
+
 --
 -- TOC entry 2128 (class 1262 OID 16384)
 -- Name: docker; Type: DATABASE; Schema: -; Owner: postgres
 --
 
-CREATE DATABASE docker WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
 
 
-ALTER DATABASE docker OWNER TO postgres;
 
-\connect docker
+
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -41,10 +39,7 @@ SET row_security = off;
 -- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
-CREATE SCHEMA public;
 
-
-ALTER SCHEMA public OWNER TO postgres;
 
 --
 -- TOC entry 2129 (class 0 OID 0)
