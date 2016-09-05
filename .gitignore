@@ -10,3 +10,5 @@ npm-debug.log
 jsconfig.json
 
 .vscode/
+
+dbbackup.txt
