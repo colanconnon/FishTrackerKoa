@@ -7,7 +7,7 @@ var parse = require("co-body");
 var router = require('koa-router')();
 
 
-router.get('/api/lake/:id', function* () {
+router.get('/api/lake/:id', function* (next) {
     var id = this.params.id;
 
     var sql = 'select lake.id as id,user_id, lakename,username from lake inner join users on user_id = users.id where user_id = $1 and lake.id = $2';
@@ -23,7 +23,7 @@ router.get('/api/lake/:id', function* () {
     }
 });
 
-router.post('/api/lakes/newlake', function* () {
+router.post('/api/lakes/newlake', function* (next) {
     var lake = yield parse(this);
     if (typeof lake === 'string') {
         lake = JSON.parse(lake);
@@ -44,7 +44,7 @@ router.post('/api/lakes/newlake', function* () {
     return yield next;
 });
 
-router.get('/api/lakes/getlakes', function* () {
+router.get('/api/lakes/', function* (next) {
     var user = this.state.user;
     var sql = 'select lake.id as id,user_id, lakename,username from lake inner join users on user_id = users.id where user_id = $1';
     var lakes = yield this.pg.db.client.query_(sql, [this.state.user.id]);
@@ -55,7 +55,7 @@ router.get('/api/lakes/getlakes', function* () {
     this.status = 200;
 });
 
-router.put('/api/lakes/update', function* () {
+router.put('/api/lakes/update', function* (next) {
     var lake = yield parse(this);
     var user = this.state.user;
     if (typeof lake === 'string') {

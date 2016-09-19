@@ -10,8 +10,24 @@ var router = require('koa-router')();
 var bcrypt = require('co-bcrypt');
 var jwt = require('koa-jwt');
 
+router.get('/api/fishcatch/', function* (next) {
+  var user = this.state.user;
+  var sql = `
+    SELECT fishcatch.id, latitude, date_caught, longitude, details, temperature, lake_id, fishcatch.user_id, users.username, lake.lakeName
+    FROM fishcatch
+    inner join lake on lake.id = lake_id
+    inner join users on users.id = fishcatch.user_id
+    where fishcatch.user_id = $1;
+  `;
+  var result = yield this.pg.db.client.query_(sql, [this.state.user.id]);
+  this.body = {
+    fishCatches: result.rows
+  };
+  this.status = 200;
+  return yield next;
+});
 
-router.get('/api/fishcatch/:id', function* () {
+router.get('/api/fishcatch/:id', function* (next) {
   var id = this.params.id;
   var sql = `
   SELECT fishcatch.id, latitude, date_caught, longitude, details, temperature, lake_id, fishcatch.user_id, users.username, lake.lakeName
@@ -33,24 +49,8 @@ router.get('/api/fishcatch/:id', function* () {
 
 });
 
-router.get('/api/fishcatch/getall', function* () {
-  var user = this.state.user;
-  var sql = `
-    SELECT fishcatch.id, latitude, date_caught, longitude, details, temperature, lake_id, fishcatch.user_id, users.username, lake.lakeName
-    FROM fishcatch
-    inner join lake on lake.id = lake_id
-    inner join users on users.id = fishcatch.user_id
-    where fishcatch.user_id = $1;
-  `;
-  var result = yield this.pg.db.client.query_(sql, [this.state.user.id]);
-  this.body = {
-    fishCatches: result.rows
-  };
-  this.status = 200;
-  return yield next;
-});
 
-router.post('/api/fishcatch/insert', function* () {
+router.post('/api/fishcatch/', function* (next) {
   try {
     var fishCatch = yield parse(this);
     if (typeof fishCatch === 'string') {
@@ -77,7 +77,7 @@ router.post('/api/fishcatch/insert', function* () {
   }
 });
 
-router.put('/api/fishcatch/update', function* () {
+router.put('/api/fishcatch/', function* (next) {
   var fishCatch = yield parse(this);
   if (typeof fishCatch === 'string') {
     fishCatch = JSON.parse(fishCatch);
