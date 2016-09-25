@@ -38,7 +38,7 @@ app.use(function* (next) {
 
 
 
-app.use(jwt({ secret: secret, key: 'user' }).unless({ path: [/^\/public/] }))
+app.use(jwt({ secret: secret, key: 'user' }).unless({ path: [/^\/public/, '/'] }));
 
 
 app

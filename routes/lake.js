@@ -23,6 +23,12 @@ router.get('/api/lake/:id', function* (next) {
     }
 });
 
+router.get('/', function* (next) {
+    this.body = "Fishtracker service";
+    this.status = 200;
+    return yield next;
+});
+
 router.post('/api/lakes/newlake', function* (next) {
     var lake = yield parse(this);
     if (typeof lake === 'string') {
