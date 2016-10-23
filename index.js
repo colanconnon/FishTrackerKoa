@@ -9,6 +9,7 @@ var secret = require('./secrets').jwt
 var cors = require('kcors')
 var koaPg = require('koa-pg')
 var postgresConn = require('./secrets').dbstring
+const port = 3005;
 
 app.use(koaPg(postgresConn))
 app.use(function* (next) {
@@ -53,6 +54,6 @@ app
   .use(lakeroutes.routes())
   .use(lakeroutes.allowedMethods())
 
-app.listen(3005);
+app.listen(port);
 
-console.log('the app is listening on port 3000');
+console.log('the app is listening on port ' + port.toString());

@@ -12,3 +12,5 @@ jsconfig.json
 .vscode/
 
 dbbackup.txt
+
+.idea/
